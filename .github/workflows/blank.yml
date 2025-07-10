@@ -1,6 +1,7 @@
 name: Validate NGINX config
 
 on:
+  workflow_dispatch:     # ➕ Permet le bouton "Run workflow"
   push:
     paths:
       - 'config/nginx.conf'
