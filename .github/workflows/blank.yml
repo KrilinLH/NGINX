@@ -1,0 +1,26 @@
+name: Validate NGINX config
+
+on:
+  push:
+    paths:
+      - 'config/nginx.conf'
+  pull_request:
+    paths:
+      - 'config/nginx.conf'
+
+jobs:
+  validate-nginx:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install NGINX
+        run: |
+          sudo apt update
+          sudo apt install -y nginx
+
+      - name: Validate NGINX config
+        run: |
+          sudo nginx -t -c "$GITHUB_WORKSPACE/config/nginx.conf"
