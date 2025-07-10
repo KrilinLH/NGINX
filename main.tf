@@ -11,53 +11,45 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_client_config" "example" {
+data "azurerm_client_config" "main" {
 }
 
-data "azurerm_container_registry" "example" {
-  name                = "testacr"
-  resource_group_name = "test"
+data "azurerm_container_registry" "main" {
+  name                = "ci-asr243-student1"
+  resource_group_name = "rg-asr243-student1"
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+resource "azurerm_resource_group" "main" {
+  name     = "rg-asr243-student1"
 }
 
-resource "azurerm_container_group" "example" {
+resource "azurerm_container_group" "nginx" {
   name                = "example-continst"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   ip_address_type     = "Public"
-  dns_name_label      = "aci-label"
+  dns_name_label      = "ci-asr243-student1_2"
   os_type             = "Linux"
 
   container {
-    name   = "hello-world"
-    image  = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
+    name   = "NGINX"
+    image  = "acrasr243mfo.azurecr.io/nginx:latest"
     cpu    = "0.5"
     memory = "1.5"
 
     ports {
-      port     = 443
+      port     = 80
       protocol = "TCP"
     }
   }
-
-  container {
-    name   = "sidecar"
-    image  = "mcr.microsoft.com/azuredocs/aci-tutorial-sidecar"
-    cpu    = "0.5"
-    memory = "1.5"
-  }
-
-  tags = {
-    environment = "testing"
-  }
 }
 
-resource "azurerm_role_assignment" "example" {
-  scope                = data.azurerm_subscription.primary.id
+identity {
+type = "SystemAssigned"
+}
+
+resource "azurerm_role_assignment" "ci_acrpull" {
+  scope                = data.azurerm_container_registry.main.id
   role_definition_name = "Reader"
-  principal_id         = data.azurerm_client_config.example.object_id
+  principal_id         = azurerm_container_group.nginx.identity[0].principal_id
 }
