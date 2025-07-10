@@ -14,7 +14,7 @@ provider "azurerm" {
 
 data "azurerm_container_registry" "main" {
   name                = "ci-asr243-student1"
-  resource_group_name = "rg-asr243-mfo"
+  resource_group_name = "rg-asr243-student1"
 }
 
 data "azurerm_resource_group" "main" {
