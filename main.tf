@@ -13,8 +13,8 @@ provider "azurerm" {
 }
 
 data "azurerm_container_registry" "main" {
-  name = "ciasr243student1"
-  resource_group_name = "rg-asr243-student1"
+  name                = "acrasr243mfo"
+  resource_group_name = "rg-asr243-mfo"
 }
 
 data "azurerm_resource_group" "main" {
@@ -34,11 +34,11 @@ resource "azurerm_role_assignment" "ci_acrpull" {
 }
 
 resource "azurerm_container_group" "nginx" {
-  name                = "ci-asr243-mfo"
+  name                = "ci-asr243-student1"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   ip_address_type     = "Public"
-  dns_name_label      = "ci-asr243-mfo"
+  dns_name_label      = "ci-asr243-student1"
   os_type             = "Linux"
   
   image_registry_credential {
