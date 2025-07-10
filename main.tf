@@ -13,7 +13,7 @@ provider "azurerm" {
 }
 
 data "azurerm_container_registry" "main" {
-  name = "ci-asr243-student1"
+  name = "ciasr243tudent1"
   resource_group_name = "rg-asr243-student1"
 }
 
