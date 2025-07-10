@@ -10,6 +10,7 @@ on:
 
 jobs:
   validate-nginx:
+    name : validate-nginx 
     runs-on: ubuntu-latest
 
     steps:
